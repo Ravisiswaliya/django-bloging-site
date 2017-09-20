@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{%block head%}
+<title>News Detail|Blog</title>
+{%endblock%}
+
+{% block content %}
+<div class="container">
+
+   <h2 class="text-center">Latest News</h2><hr>
+<div class="col-md-12">
+
+       {% for n in news %}
+
+   <div class="panel panel-default col-md-3" style="background:whitesmoke; border: 5px solid #e8e4e4; border-radius:15px;">
+           <h4>{{n.title}}</h4>
+       {% if n.image %}
+       <img src="{{n.image.url}}"  height="150;" width="170"/>
+       {% endif %}
+       <p>{{n.content|truncatechars:30}}</p>
+      <a href="{% url 'news:news_detail' n.id %}">
+          <button type="button" class="btn btn-primary btn-xs pull-right">Read More...</button>
+      </a>
+       <a href="{% url 'news:delete' n.id %}">
+       <span class="glyphicon glyphicon-trash"></span>
+           </a>
+       <a href="{% url 'news:update' n.id %}">
+       <span class="glyphicon glyphicon-pencil"></span>
+           </a>
+   </div>
+
+   {% endfor %}
+       
+       </div>
+</div>
+{%endblock%}
+
