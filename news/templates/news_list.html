@@ -5,6 +5,15 @@
 
 {% block content %}
 <div class="container">
+    {% if messages %}
+
+    {% for message in messages %}
+    <script>
+      alert('{{ message }}')
+    </script>
+    {% endfor %}
+
+{% endif %}
 <form method="get">
 
 </form>

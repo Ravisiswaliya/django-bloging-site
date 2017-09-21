@@ -1,5 +1,6 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse
+from django.contrib import messages
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from .models import News,Cat
 from django.db.models import Q
@@ -15,6 +16,7 @@ def create_news(request):
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
+        messages.success(request,"Post successfully created")
         return redirect('news:news_list')
     context = {'form':form}
     template = 'create_news.html'
@@ -32,7 +34,7 @@ def news_list(request):
     n = News.objects.all().order_by("-timestamp")
     ctb = Cat.objects.all()
     page = request.GET.get('page')
-    paginator = Paginator(n,4)
+    paginator = Paginator(n,12)
     try:
         users = paginator.page(page)
     except PageNotAnInteger:
@@ -56,6 +58,7 @@ def update_news(request,id=None):
     if form.is_valid():
         d = form.save(commit=False)
         d.save()
+        messages.success(request, "Post successfully updated.")
         return redirect('news:news_list')
     template = 'create_news.html'
     context = {'d':d,
@@ -67,4 +70,5 @@ def update_news(request,id=None):
 def delete_news(request,id=None):
     n = get_object_or_404(News, id=id)
     n.delete()
+    messages.success(request, "Post successfully deleted")
     return redirect('news:news_list')
