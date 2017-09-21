@@ -1,5 +1,6 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from .models import News,Cat
 from django.db.models import Q
 from .forms import CreateNews
@@ -28,8 +29,16 @@ def news_detail(request,id=None):
 
 # list of all news
 def news_list(request):
-    n = News.objects.all()
+    n = News.objects.all().order_by("-timestamp")
     ctb = Cat.objects.all()
+    paginator = Paginator(n,4)
+    page = request.GET.get('page')
+    try:
+        n = paginator.page(page)
+    except PageNotAnInteger:
+        n = paginator.page(1)
+    except EmptyPage:
+        n = paginator.page(paginator.num_pages)
     query = request.GET.get('q')
     if query:
         n = n.filter(
