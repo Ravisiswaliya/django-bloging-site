@@ -30,6 +30,12 @@ def news_detail(request,id=None):
 def news_list(request):
     n = News.objects.all()
     ctb = Cat.objects.all()
+    query = request.GET.get('q')
+    if query:
+        n = n.filter(
+            Q(title__icontains = query)|
+            Q(content__icontains = query)
+              )
     context = {'news':n, 'ct':ctb}
     template = 'news_list.html'
     return render(request,template,context)

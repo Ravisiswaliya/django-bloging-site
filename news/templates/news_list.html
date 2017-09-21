@@ -5,9 +5,15 @@
 
 {% block content %}
 <div class="container">
+<form method="get">
 
+</form>
    <h2 class="text-center">Latest News</h2><hr>
 <div class="col-md-12">
+    <form>
+        <input type="text" placeholder="Search News.." name="q" value="{{request.GET.q}}">
+        <input type="submit" value="Search" class="btn">
+    </form>
 
        {% for n in news %}
 
@@ -29,7 +35,7 @@
    </div>
 
    {% endfor %}
-       
+
        </div>
 </div>
 {%endblock%}
