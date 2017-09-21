@@ -15,21 +15,21 @@
         <input type="submit" value="Search" class="btn">
     </form>
 
-       {% for n in news %}
+       {% for user in users %}
 
    <div class="panel panel-default col-md-3" style="background:whitesmoke; border: 5px solid #e8e4e4; border-radius:15px;">
-           <h4>{{n.title}}</h4>
-       {% if n.image %}
-       <img src="{{n.image.url}}"  height="150;" width="170"/>
+           <h4>{{user.title}}</h4>
+       {% if user.image %}
+       <img src="{{user.image.url}}"  height="150;" width="170"/>
        {% endif %}
-       <p>{{n.content|truncatechars:30}}</p>
-      <a href="{% url 'news:news_detail' n.id %}">
+       <p>{{user.content|truncatechars:30}}</p>
+      <a href="{% url 'news:news_detail' user.id %}">
           <button type="button" class="btn btn-primary btn-xs pull-right">Read More...</button>
       </a>
-       <a href="{% url 'news:delete' n.id %}">
+       <a href="{% url 'news:delete' user.id %}">
        <span class="glyphicon glyphicon-trash"></span>
            </a>
-       <a href="{% url 'news:update' n.id %}">
+       <a href="{% url 'news:update' user.id %}">
        <span class="glyphicon glyphicon-pencil"></span>
            </a>
    </div>
@@ -37,20 +37,31 @@
    {% endfor %}
 
 </div>
-     <div class="pagination text-center">
-    <span class="step-links">
-        {% if n.has_previous %}
-            <a href="?page={{ n.previous_page_number }}">previous</a>
-        {% endif %}
+    <div class="clearfix"></div>
 
-        <span class="current">
-            Page {{ n.number }} of {{ n.paginator.num_pages }}.
-        </span>
-
-        {% if n.has_next %}
-            <a href="?page={{ n.next_page_number }}">next</a>
-        {% endif %}
-    </span>
-</div>
+     <div class="col-md-12 text-center">
+         {% if users.has_other_pages %}
+  <ul class="pagination">
+    {% if users.has_previous %}
+      <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in users.paginator.page_range %}
+      {% if users.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if users.has_next %}
+      <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+     </div>
+    <div class="clearfix"></div>
 {%endblock%}
 

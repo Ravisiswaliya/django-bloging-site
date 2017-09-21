@@ -31,21 +31,21 @@ def news_detail(request,id=None):
 def news_list(request):
     n = News.objects.all().order_by("-timestamp")
     ctb = Cat.objects.all()
-    paginator = Paginator(n,4)
     page = request.GET.get('page')
+    paginator = Paginator(n,4)
     try:
-        n = paginator.page(page)
+        users = paginator.page(page)
     except PageNotAnInteger:
-        n = paginator.page(1)
+        users = paginator.page(1)
     except EmptyPage:
-        n = paginator.page(paginator.num_pages)
+        users = paginator.page(paginator.num_pages)
     query = request.GET.get('q')
     if query:
         n = n.filter(
             Q(title__icontains = query)|
             Q(content__icontains = query)
               )
-    context = {'news':n, 'ct':ctb}
+    context = {'users':users, 'ct':ctb}
     template = 'news_list.html'
     return render(request,template,context)
 
